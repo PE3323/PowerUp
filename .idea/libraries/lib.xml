@@ -7,7 +7,10 @@
     <NATIVE>
       <root url="file://$USER_HOME$/wpilib/user/java/lib" />
     </NATIVE>
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$USER_HOME$/wpilib/user/java/lib" />
+    </SOURCES>
     <jarDirectory url="file://$USER_HOME$/wpilib/user/java/lib" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/wpilib/user/java/lib" recursive="false" type="SOURCES" />
   </library>
 </component>
