@@ -2,10 +2,12 @@ package frc.team3323.Autonomous;
 
 public abstract class State
 {
-    private boolean notCalled;
+    private boolean beenCalled;
     private String name;
 
     public abstract boolean transitionWhen();
+    public abstract void execute();
+    public abstract void complete();
 
     public State( String name )
     {
@@ -14,13 +16,17 @@ public abstract class State
 
     protected void initialize() {}
 
+    public String getName() {
+        return name;
+    }
+
     public void doInitialize()
     {
 
-        if (notCalled)
+        if (beenCalled == false)
         {
             initialize();
-            notCalled = true;
+            beenCalled = true;
         }
     }
 

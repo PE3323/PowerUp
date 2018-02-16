@@ -18,7 +18,6 @@ public class LiftElevator extends Command {
     }
     protected void execute()
     {
-        elev.lift();
     }
     protected void end()
     {

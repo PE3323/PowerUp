@@ -1,12 +1,15 @@
 package frc.team3323.Elevator;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends Subsystem {
 
-    private WPI_TalonSRX srxElevator = new WPI_TalonSRX(5);
+    public Spark motorElevator = new Spark(4);
+    PowerDistributionPanel pdp = new PowerDistributionPanel();
 
     public void initDefaultCommand()
     {
@@ -17,14 +20,19 @@ public class Elevator extends Subsystem {
        return new LiftElevator(this);
     }
 
-    public void lift()
+    public void lift(double speed)
     {
-        srxElevator.set(0.5);
+            motorElevator.set(speed);
+    }
+
+    public Elevator(PowerDistributionPanel pdp)
+    {
+        this.pdp = pdp;
     }
 
     public void stop()
     {
-        srxElevator.set(0.5);
+        motorElevator.set(0.0);
     }
 }
 

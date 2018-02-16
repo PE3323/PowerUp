@@ -2,15 +2,16 @@ package frc.team3323.Manipulator;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Manipulator extends Subsystem {
 
-    private SpeedController armLeft = new Spark(0);
-    private SpeedController armRight = new Spark(1);
-    private Spark armWheelLeft = new Spark(3);
-    private Spark armWheelRight = new Spark(2);
-    private double speed = 1;
+    private SpeedController armLeft = new Talon(0);
+    private SpeedController armRight = new Talon(3);
+    private SpeedController armWheelLeft = new Talon(1);
+    private SpeedController armWheelRight = new Talon(2);
+    private double speed = .5;
     private double speed2 = .5;
 
 
@@ -25,13 +26,13 @@ public class Manipulator extends Subsystem {
     public void close()
     {
         armLeft.set(speed);
-        armRight.set(-speed);
+        armRight.set(speed);
     }
 
     public void open()
     {
         armLeft.set(-speed);
-        armRight.set(speed);
+        armRight.set(-speed);
     }
 
     public void intake()

@@ -4,138 +4,91 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
+//Owen, add some code to add a deadzone to the controller sticks. They are very sensitive.
 package frc.team3323;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team3323.Autonomous.AutoState;
+import frc.team3323.Autonomous.Move;
+import frc.team3323.Autonomous.State;
+import frc.team3323.Autonomous.Turn;
 import frc.team3323.Drivetrain.Drivetrain;
 import frc.team3323.Elevator.Elevator;
 import frc.team3323.Manipulator.Manipulator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Robot extends IterativeRobot
 {
-    private Elevator elevator = new Elevator();
     private Manipulator manipulator = new Manipulator();
     private Drivetrain drivetrain = new Drivetrain();
     private PowerDistributionPanel pdp= new PowerDistributionPanel();
-    private UI ui = new UI(manipulator);
-    private AutoState autoState = null; //Unknown State
-    int distance1 = 37;
-    int distance2 = 23;
+    private Elevator elevator = new Elevator(pdp);
+    private UI ui = new UI(manipulator, elevator);
+    private List movements = new ArrayList();
 
     public void robotPeriodic()
     {
         drivetrain.log(pdp);
+        SmartDashboard.putNumber("Battery Voltage", pdp.getVoltage());
         SmartDashboard.putData("gyro", drivetrain.getGyro());
     }
 
     public void autonomousInit()
     {
-        drivetrain.getEncoderLeft().reset();
-        drivetrain.getEncoderRight().reset();
-        autoState = AutoState.Inital;
+        movements.clear();
+        if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)=='R')
+        {
+            // Right Auto
+            movements.add(new Move("move1", 35, drivetrain, drivetrain.getEncoderLeft()));
+        }
+        else
+        {
+            //Left Auto
+            movements.add(new Move("move1", 37, drivetrain, drivetrain.getEncoderRight()));
+            movements.add(new Turn("turn1", 90, drivetrain));
+            movements.add(new Move("move2", 25, drivetrain, drivetrain.getEncoderRight()));
+            movements.add(new Turn("turn2", 90, drivetrain));
+            movements.add(new Move("move3", 37, drivetrain, drivetrain.getEncoderRight()));
+            movements.add(new Turn("turn3", 90, drivetrain));
+            movements.add(new Move("move4", 25, drivetrain, drivetrain.getEncoderRight()));
+            movements.add(new Turn("turn4", 90, drivetrain));
+        }
     }
 
     public void autonomousPeriodic()
     {
-        SmartDashboard.putString("Auto State", autoState.name());
-        if(autoState == AutoState.Inital)
-        {
-            autoState = AutoState.Forward1;
-        }
-
-        if(autoState == AutoState.Forward1 )
-        {
-            drivetrain.startMove(-.5);
-            if( drivetrain.pulsesToDistance(drivetrain.getEncoderLeft()) > (distance1-1) ) {
-                autoState = AutoState.Turn1;
-                drivetrain.getGyro().reset();
-            }
-
-        }
-
-        if(autoState == AutoState.Turn1)
-        {
-            drivetrain.startTurn(-.75,true);
-            if (drivetrain.getGyro().getAngle()> 75) {
-                autoState = AutoState.Forward2;
-                drivetrain.getEncoderLeft().reset();
-            }
-        }
-
-
-        if(autoState == AutoState.Forward1 )
-        {
-            drivetrain.startMove(-.5);
-            if( drivetrain.pulsesToDistance(drivetrain.getEncoderLeft()) > (distance1-1) ) {
-                autoState = AutoState.Turn1;
-                drivetrain.getGyro().reset();
-            }
-
-        }
-
-        if(autoState == AutoState.Turn1)
-        {
-            drivetrain.startTurn(-.75,true);
-            if (drivetrain.getGyro().getAngle()> 75) {
-                autoState = AutoState.Forward2;
-                drivetrain.getEncoderLeft().reset();
-            }
-        }
-
-        if(autoState == AutoState.Forward1 )
-        {
-            drivetrain.startMove(-.5);
-            if( drivetrain.pulsesToDistance(drivetrain.getEncoderLeft()) > (distance1-1) ) {
-                autoState = AutoState.Turn1;
-                drivetrain.getGyro().reset();
-            }
-
-        }
-
-        if(autoState == AutoState.Turn1)
-        {
-            drivetrain.startTurn(-.75,true);
-            if (drivetrain.getGyro().getAngle()> 75) {
-                autoState = AutoState.Forward2;
-                drivetrain.getEncoderLeft().reset();
-            }
-        }
-
-        if(autoState == AutoState.Forward1 )
-        {
-            drivetrain.startMove(-.5);
-            if( drivetrain.pulsesToDistance(drivetrain.getEncoderLeft()) > (distance1-1) ) {
-                autoState = AutoState.Turn1;
-                drivetrain.getGyro().reset();
-            }
-
-        }
-
-        if(autoState == AutoState.Turn1)
-        {
-            drivetrain.startTurn(-.75,true);
-            if (drivetrain.getGyro().getAngle()> 75) {
-                autoState = AutoState.Forward2;
-                drivetrain.getEncoderLeft().reset();
-            }
-        }
-
-        if(autoState == AutoState.End)
+        if(movements.isEmpty())
             drivetrain.stop();
+        else {
+            State state = (State) movements.get(0);
+            SmartDashboard.putString("State", state.getName());
+            SmartDashboard.putBoolean("When", state.transitionWhen());
+            state.doInitialize();
 
-//        DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L'
+            if (state.transitionWhen()) {
+                movements.remove(0);
+                state.complete();
+            } else {
+                state.execute();
+            }
+        }
     }
 
 
 
     public void teleopPeriodic()
     {
-        drivetrain.getDriveTrain().tankDrive(ui.joystickLeft.getY(), ui.joystickRight.getY());
+        double driveAmount = ui.getXbox().getRawAxis(2) + ui.getXbox().getRawAxis(3);
+        elevator.lift(ui.getXbox().getRawAxis(5));
+        drivetrain.getDriveTrain().arcadeDrive(driveAmount, ui.getXbox().getRawAxis(0));
         Scheduler.getInstance().run();
     }
 }
+//Guard: Hey;, you are not allowed to bring food into the theater.
+//Me: But it's my service burrito...

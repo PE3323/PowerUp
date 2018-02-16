@@ -36,10 +36,10 @@ public class Drivetrain {
 
     public void log(PowerDistributionPanel pdp)
     {
-        SmartDashboard.putNumber("Draw LB", pdp.getCurrent(12));
-        SmartDashboard.putNumber("Draw LF", pdp.getCurrent(13));
-        SmartDashboard.putNumber("Draw RB", pdp.getCurrent(14));
-        SmartDashboard.putNumber("Draw RF", pdp.getCurrent(15));
+        SmartDashboard.putNumber("Draw LB", srxLB.getOutputCurrent());
+        SmartDashboard.putNumber("Draw LF", srxLF.getOutputCurrent());
+        SmartDashboard.putNumber("Draw RB", srxRB.getOutputCurrent());
+        SmartDashboard.putNumber("Draw RF", srxRF.getOutputCurrent());
         SmartDashboard.putNumber("Encoder Left", pulsesToDistance(encoderLeft));
         SmartDashboard.putNumber("Encoder Right", pulsesToDistance(encoderRight));
         SmartDashboard.putNumber("angle", gyro.getAngle());
@@ -86,7 +86,7 @@ public class Drivetrain {
 
     public double pulsesToDistance(Encoder encoder)
     {
-        double conversion = SmartDashboard.getNumber("DPP", 100);
+        double conversion = SmartDashboard.getNumber("DPP", 650);
         double distance;
         distance = encoder.getRaw() / conversion;
         return distance;
