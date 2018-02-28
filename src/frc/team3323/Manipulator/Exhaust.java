@@ -3,12 +3,12 @@ package frc.team3323.Manipulator;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Exhaust extends Command {
-    private Manipulator mani;
+    private Wheels wheels;
 
-    public Exhaust(Manipulator mani )
+    public Exhaust(Wheels wheels )
     {
-        requires(mani);
-        this.mani = mani;
+        requires(wheels);
+        this.wheels = wheels;
     }
 
     @Override
@@ -18,10 +18,10 @@ public class Exhaust extends Command {
     }
     protected void execute()
     {
-        mani.exhaust();
+        wheels.exhaust();
     }
     protected void end()
     {
-        mani.stop();
+        wheels.stop();
     }
 }

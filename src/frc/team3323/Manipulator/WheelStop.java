@@ -2,12 +2,14 @@ package frc.team3323.Manipulator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ManiStop extends Command {
-    private Manipulator mani;
+public class WheelStop extends Command {
 
-    public ManiStop(Manipulator mani) {
-        requires(mani);
-        this.mani = mani;
+    private Wheels wheels;
+
+    public WheelStop(Wheels wheels)
+    {
+        requires(wheels);
+        this.wheels = wheels;
     }
 
     @Override
@@ -15,8 +17,9 @@ public class ManiStop extends Command {
     {
         return false;
     }
+
     protected void execute()
     {
-        mani.stop();
+        wheels.stop();
     }
 }

@@ -4,6 +4,7 @@ public abstract class State
 {
     private boolean beenCalled;
     private String name;
+    double startTime;
 
     public abstract boolean transitionWhen();
     public abstract void execute();
@@ -14,7 +15,14 @@ public abstract class State
         this.name = name;
     }
 
-    protected void initialize() {}
+    protected void initialize()
+    {startTime = System.currentTimeMillis();}
+
+    public double StateDurationCounter()
+    {
+        double duration = System.currentTimeMillis() - startTime;
+        return duration;
+    }
 
     public String getName() {
         return name;

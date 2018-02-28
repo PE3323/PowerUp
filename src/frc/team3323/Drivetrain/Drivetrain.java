@@ -7,18 +7,19 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3323.RobotMap;
 
 public class Drivetrain {
 
-    private WPI_TalonSRX srxLB = new WPI_TalonSRX(2);
-    private WPI_TalonSRX srxRB = new WPI_TalonSRX(3);
-    private WPI_TalonSRX srxLF = new WPI_TalonSRX(4);
-    private WPI_TalonSRX srxRF = new WPI_TalonSRX(5);
+    private WPI_TalonSRX srxLB = new WPI_TalonSRX(RobotMap.leftBackID);
+    private WPI_TalonSRX srxRB = new WPI_TalonSRX(RobotMap.rightBackID);
+    private WPI_TalonSRX srxLF = new WPI_TalonSRX(RobotMap.leftFrontID);
+    private WPI_TalonSRX srxRF = new WPI_TalonSRX(RobotMap.rightFrontID);
     private SpeedControllerGroup left = new SpeedControllerGroup(srxLF,srxLB);
     private SpeedControllerGroup right = new SpeedControllerGroup(srxRF,srxRB);
 
-    private Encoder encoderLeft = new Encoder(0, 1);
-    private Encoder encoderRight = new Encoder(2,3);
+    private Encoder encoderLeft = new Encoder(RobotMap.leftBlueID, RobotMap.leftYellowID);
+    private Encoder encoderRight = new Encoder(RobotMap.rightBlueID,RobotMap.rightYellowID);
     private DifferentialDrive driveTrain = new DifferentialDrive(left,right);
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
@@ -28,11 +29,6 @@ public class Drivetrain {
       right.setInverted( true );
     }
 
-    public void initDefaultCommand()
-    {
-        // TODO: Set the default command, if any, for a subsystem here. Example:
-        //    setDefaultCommand(new MySpecialCommand());
-    }
 
     public void log(PowerDistributionPanel pdp)
     {
@@ -43,6 +39,8 @@ public class Drivetrain {
         SmartDashboard.putNumber("Encoder Left", pulsesToDistance(encoderLeft));
         SmartDashboard.putNumber("Encoder Right", pulsesToDistance(encoderRight));
         SmartDashboard.putNumber("angle", gyro.getAngle());
+        SmartDashboard.putNumber("Amount Left", left.get());
+        SmartDashboard.putNumber("Amount Right", right.get());
     }
 
     public ADXRS450_Gyro getGyro()
@@ -74,7 +72,7 @@ public class Drivetrain {
     public void startTurn(double speed, boolean right)
     {
         double rotation= 1;
-        if (right == true)
+        if (right)
             rotation= rotation*-1;
         driveTrain.arcadeDrive(speed,rotation);
     }

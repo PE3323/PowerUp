@@ -3,12 +3,12 @@ package frc.team3323.Manipulator;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Open extends Command {
-    private Manipulator mani;
+    private Arms arms;
 
-    public Open(Manipulator mani )
+    public Open(Arms arms )
     {
-        requires(mani);
-        this.mani = mani;
+        requires(arms);
+        this.arms = arms;
     }
 
     @Override
@@ -18,10 +18,10 @@ public class Open extends Command {
     }
     protected void execute()
     {
-        mani.open();
+        arms.open();
     }
     protected void end()
     {
-        mani.stop();
+        arms.stop();
     }
 }

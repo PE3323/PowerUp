@@ -3,12 +3,12 @@ package frc.team3323.Manipulator;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Intake extends Command {
-    private Manipulator mani;
+    private Wheels wheels;
 
-    public Intake(Manipulator mani )
+    public Intake(Wheels wheels )
     {
-        requires(mani);
-        this.mani = mani;
+        requires(wheels);
+        this.wheels = wheels;
     }
 
     @Override
@@ -18,10 +18,10 @@ public class Intake extends Command {
     }
     protected void execute()
     {
-        mani.intake();
+        wheels.intake();
     }
     protected void end()
     {
-        mani.stop();
+        wheels.stop();
     }
 }

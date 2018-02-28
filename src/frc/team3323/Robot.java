@@ -6,18 +6,16 @@
 /*----------------------------------------------------------------------------*/
 //Owen, add some code to add a deadzone to the controller sticks. They are very sensitive.
 package frc.team3323;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3323.Autonomous.GrabCube;
 import frc.team3323.Autonomous.Move;
 import frc.team3323.Autonomous.State;
-import frc.team3323.Autonomous.Turn;
 import frc.team3323.Drivetrain.Drivetrain;
 import frc.team3323.Elevator.Elevator;
-import frc.team3323.Manipulator.Manipulator;
+import frc.team3323.Manipulator.Arms;
+import frc.team3323.Manipulator.Wheels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +23,24 @@ import java.util.List;
 
 public class Robot extends IterativeRobot
 {
-    private Manipulator manipulator = new Manipulator();
+    private Arms arms = new Arms();
+    private Wheels wheels = new Wheels();
     private Drivetrain drivetrain = new Drivetrain();
     private PowerDistributionPanel pdp= new PowerDistributionPanel();
     private Elevator elevator = new Elevator(pdp);
-    private UI ui = new UI(manipulator, elevator);
+    private UI ui = new UI(arms, wheels, elevator);
     private List movements = new ArrayList();
+
+    public void robotInit()
+    {
+        CameraServer.getInstance().startAutomaticCapture();
+    }
 
     public void robotPeriodic()
     {
         drivetrain.log(pdp);
+        arms.log(pdp);
+        wheels.log(pdp);
         SmartDashboard.putNumber("Battery Voltage", pdp.getVoltage());
         SmartDashboard.putData("gyro", drivetrain.getGyro());
     }
@@ -42,23 +48,24 @@ public class Robot extends IterativeRobot
     public void autonomousInit()
     {
         movements.clear();
-        if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)=='R')
-        {
-            // Right Auto
-            movements.add(new Move("move1", 35, drivetrain, drivetrain.getEncoderLeft()));
-        }
-        else
-        {
-            //Left Auto
-            movements.add(new Move("move1", 37, drivetrain, drivetrain.getEncoderRight()));
-            movements.add(new Turn("turn1", 90, drivetrain));
-            movements.add(new Move("move2", 25, drivetrain, drivetrain.getEncoderRight()));
-            movements.add(new Turn("turn2", 90, drivetrain));
-            movements.add(new Move("move3", 37, drivetrain, drivetrain.getEncoderRight()));
-            movements.add(new Turn("turn3", 90, drivetrain));
-            movements.add(new Move("move4", 25, drivetrain, drivetrain.getEncoderRight()));
-            movements.add(new Turn("turn4", 90, drivetrain));
-        }
+//        if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)=='R')
+//        {
+//            // Right Auto
+//            movements.add(new Move("move1", 35, drivetrain, drivetrain.getEncoderLeft()));
+//        }
+//        else
+//        {
+//            //Left Auto
+//            movements.add(new Move("move1", 37, drivetrain, drivetrain.getEncoderRight()));
+//            movements.add(new Turn("turn1", 90, drivetrain));
+//            movements.add(new Move("move2", 25, drivetrain, drivetrain.getEncoderRight()));
+//            movements.add(new Turn("turn2", 90, drivetrain));
+//            movements.add(new Move("move3", 37, drivetrain, drivetrain.getEncoderRight()));
+//            movements.add(new Turn("turn3", 90, drivetrain));
+//            movements.add(new Move("move4", 25, drivetrain, drivetrain.getEncoderRight()));
+//            movements.add(new Turn("turn4", 90, drivetrain));
+//        }
+        movements.add( new Move("move1", 5,drivetrain, drivetrain.getEncoderRight()));
     }
 
     public void autonomousPeriodic()
@@ -84,9 +91,10 @@ public class Robot extends IterativeRobot
 
     public void teleopPeriodic()
     {
-        double driveAmount = ui.getXbox().getRawAxis(2) + ui.getXbox().getRawAxis(3);
+        double driveAmount = -(ui.getXbox().getRawAxis(3)) + ui.getXbox().getRawAxis(2);
         elevator.lift(ui.getXbox().getRawAxis(5));
-        drivetrain.getDriveTrain().arcadeDrive(driveAmount, ui.getXbox().getRawAxis(0));
+        drivetrain.getDriveTrain().arcadeDrive(-driveAmount, -ui.getXbox().getRawAxis(0));
+        SmartDashboard.putNumber("drive number",driveAmount);
         Scheduler.getInstance().run();
     }
 }
