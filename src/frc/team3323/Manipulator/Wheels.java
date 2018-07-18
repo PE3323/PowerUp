@@ -11,8 +11,6 @@ public class Wheels extends Subsystem
 {
     private WPI_TalonSRX wheelLeft = new WPI_TalonSRX(RobotMap.armWheelLeftID);
     private WPI_TalonSRX wheelRight = new WPI_TalonSRX(RobotMap.armWheelRightID);
-    private double speed = .5;
-    private double speed2 = -.5;
 
     public void log(PowerDistributionPanel pdp)
     {
@@ -21,23 +19,20 @@ public class Wheels extends Subsystem
         SmartDashboard.putNumber("Right Wheel", pdp.getCurrent(14));
     }
 
-    public void stop()
+    public void moveWheels(boolean isRight, double speed, boolean directionOut)
     {
-        wheelLeft.set(0);
-        wheelRight.set(0);
+        double adjustedSpeed;
+        if(directionOut)
+            adjustedSpeed = speed;
+        else
+            adjustedSpeed = -speed;
+        if(isRight)
+            wheelRight.set(adjustedSpeed);
+        else
+            wheelLeft.set(adjustedSpeed);
+
     }
 
-    public void intake()
-    {
-        wheelLeft.set(speed);
-        wheelRight.set(speed);
-    }
-
-    public void exhaust()
-    {
-        wheelLeft.set(speed2);
-        wheelRight.set(speed2);
-    }
 
     public WPI_TalonSRX getWheelLeft()
     {

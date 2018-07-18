@@ -8,6 +8,7 @@ public class Turn extends State
     private double angle;
     private Drivetrain drive;
     private double speed;
+    private boolean right;
 
     public Turn(String name, long angle, double speed, Drivetrain drive)
     {
@@ -28,11 +29,19 @@ public class Turn extends State
     protected void initialize()
     {
         drive.getGyro().reset();
+
+        if (angle < 0)
+            right = false;
+        else
+            right = true;
     }
 
     public boolean transitionWhen()
     {
-        return( this.angle <= drive.getGyro().getAngle() );
+        if (right)
+            return(this.angle <= drive.getGyro().getAngle() );
+        else
+            return(this.angle >= drive.getGyro().getAngle() );
     }
 
     public void execute()

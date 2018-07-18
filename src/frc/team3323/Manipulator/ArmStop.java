@@ -21,6 +21,7 @@ public class ArmStop extends Command
 
     protected void execute()
     {
-        arms.stop();
+        arms.moveArm(true,0,true);
+        arms.moveArm(false,0,true);
     }
 }

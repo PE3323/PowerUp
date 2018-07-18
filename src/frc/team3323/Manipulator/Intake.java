@@ -16,12 +16,9 @@ public class Intake extends Command {
     {
         return false;
     }
-    protected void execute()
-    {
-        wheels.intake();
+    protected void execute() {
+        wheels.moveWheels(true, .5, false);
+        wheels.moveWheels(false, .5, false);
     }
-    protected void end()
-    {
-        wheels.stop();
-    }
+
 }

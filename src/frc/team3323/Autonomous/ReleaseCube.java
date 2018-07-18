@@ -11,22 +11,19 @@ public class ReleaseCube extends State
     private double duration;
     private Arms arms;
     private Wheels wheels;
-    public boolean transitionWhen() {return(duration>3000);}
+    public boolean transitionWhen() {return(duration>1500);}
     public void execute()
     {
         duration = StateDurationCounter();
-        arms.getArmLeft().set(-0.5);
-        arms.getArmRight().set(-0.5);
-        wheels.getWheelLeft().set(-0.5);
-        wheels.getWheelRight().set(-0.5);
-
+        arms.moveArm(true, .75,false);
+        arms.moveArm(false, .75,false);
     }
     public void complete()
     {
-        arms.stop();
-        wheels.stop();
-
-
+        arms.moveArm(true, 0,true);
+        arms.moveArm(false, 0,true);
+        wheels.moveWheels(true, 0,false);
+        wheels.moveWheels(false, 0,false);
     }
 
     public ReleaseCube(String name, Arms arms, Wheels wheels)

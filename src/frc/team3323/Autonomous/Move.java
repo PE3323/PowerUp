@@ -10,6 +10,7 @@ public class Move extends State
     private Drivetrain drive;
     private double speed;
     private Encoder encoder;
+    private boolean reverse;
 
     public Move(String name, long distance, double speed, Drivetrain drive, Encoder encoder)
     {
@@ -26,23 +27,32 @@ public class Move extends State
         this.distance = distance-1;
         this.drive = drive;
         this.encoder = encoder;
-        this.speed = .5; // Default speed if not set
+        this.speed = -.5; // Default speed if not set
     }
 
     protected void initialize()
     {
         drive.getEncoderLeft().reset();
         drive.getEncoderRight().reset();
+
+        if (distance < 0)
+            reverse = false;
+        else
+            reverse = true;
     }
+
 
     public boolean transitionWhen()
     {
-        return(this.distance <= drive.pulsesToDistance(encoder));
+        if (reverse)
+            return(this.distance <= drive.pulsesToDistance(encoder));
+        else
+            return(this.distance >= drive.pulsesToDistance(encoder));
     }
 
     public void execute()
     {
-      if (distance > 0)
+      if (reverse)
           drive.startMove(-speed);
       else
           drive.startMove(speed);

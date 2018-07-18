@@ -7,29 +7,22 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3323.RobotMap;
+import frc.team3323.UI;
 
 public class Elevator extends Subsystem {
 
     public Spark motorElevator = new Spark(RobotMap.elevatorID);
     public Encoder encoderElevator = new Encoder(RobotMap.elevatorBlueID, RobotMap.elevatorYellowID);
-    public AnalogInput limitSwitch = new AnalogInput(RobotMap.limitSwitch
-    );
+    public AnalogInput limitSwitch = new AnalogInput(RobotMap.limitSwitchID);
     PowerDistributionPanel pdp;
 
     public void log(PowerDistributionPanel pdp)
     {
-        SmartDashboard.putNumber("Encoder Draw", encoderElevator.getRaw());
-
+        SmartDashboard.putNumber("Elevator Encoder", encoderElevator.getRaw());
     }
 
     public void initDefaultCommand()
     {
-        setDefaultCommand(new ElevatorStop(this));
-    }
-
-    public LiftElevator getLiftElevator()
-    {
-       return new LiftElevator(this);
     }
 
     public void reset()
@@ -50,15 +43,19 @@ public class Elevator extends Subsystem {
         return elevatorInches;
     }
 
-
-
-
-
-
-    public void lift(double speed)
+    public void lift(double speed, UI ui)
     {
+        if(encoderElevator.getRaw()<15000)
             motorElevator.set(speed);
-            //SmartDashboard.putNumber("Elevator Current",motorElevator.getOutputCurrent());
+        else
+        {
+            if(ui.getXboxCube().getRawAxis(1)<0)
+            {
+                motorElevator.set(0);
+            }
+            else
+                motorElevator.set(speed);
+        }
     }
 
     public Elevator(PowerDistributionPanel pdp)

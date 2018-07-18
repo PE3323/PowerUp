@@ -9,38 +9,33 @@ import java.time.Duration;
 
 public class ElevatorRise extends State
 {
-    private Elevator riseElevator;
-    private double duration;
-    private Encoder elevatorEncoder = new Encoder(4,5);
-    private Spark motorElevator;
-    private Elevator elevatorRise;
-    private double goal = 3000;
+    private Elevator elevator;
+    private double goal;
 
 
-    public boolean transitionWhen() { return(elevatorEncoder.getRaw()>goal);}
+    public boolean transitionWhen() { return(elevator.encoderElevator.getRaw()>goal);}
     public void execute()
     {
-        //duration = StateDurationCounter();
-        elevatorRise.motorElevator.set(0.5);
+        elevator.motorElevator.set(-0.5);
     }
     public void complete()
     {
-        motorElevator.set(0);
+        elevator.motorElevator.set(0);
     }
 
     public int elevatorToInches(Elevator riseElevator)
     {
         int elevatorInches;
-        elevatorInches = elevatorEncoder.getRaw()/100;
+        elevatorInches = elevator.encoderElevator.getRaw()/100;
         SmartDashboard.putNumber("elevatorInches", elevatorInches);
         return elevatorInches;
     }
 
 
-    public ElevatorRise(String name, Elevator riseElevator, Duration durationElevator, double goal)
+    public ElevatorRise(String name, Elevator elevator, double goal)
     {
         super( name );
-        riseElevator = riseElevator;
+        this.elevator = elevator;
         this.goal = goal;
 
     }

@@ -18,10 +18,7 @@ public class Exhaust extends Command {
     }
     protected void execute()
     {
-        wheels.exhaust();
-    }
-    protected void end()
-    {
-        wheels.stop();
+        wheels.moveWheels(true,.5,true);
+        wheels.moveWheels(false,.5,true);
     }
 }

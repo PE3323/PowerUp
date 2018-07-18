@@ -18,10 +18,7 @@ public class Open extends Command {
     }
     protected void execute()
     {
-        arms.open();
-    }
-    protected void end()
-    {
-        arms.stop();
+        arms.moveArm(true,.5,false);
+        arms.moveArm(false,.5,false);
     }
 }

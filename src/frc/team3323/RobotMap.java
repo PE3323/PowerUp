@@ -20,17 +20,14 @@ public class RobotMap
     // Drivetrain Encoders
     public static int leftBlueID = 0;
     public static int leftYellowID = 1;
-    public static int rightBlueID = 2;
-    public static int rightYellowID = 3;
+    public static int rightYellowID = 2;
+    public static int rightBlueID = 3;
 
     // Elevator Encoders
-    public static int elevatorBlueID = 7;
-    public static int elevatorYellowID = 8;
+    public static int elevatorBlueID = 5;
+    public static int elevatorYellowID = 4;
 
-    // Elevator LimitSwitch
-    public static int limitSwitch = 0;
-
-
-
+    // Elevator Limit Switch
+    public static int limitSwitchID = 0;
 
 }

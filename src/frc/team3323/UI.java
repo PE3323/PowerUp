@@ -2,30 +2,36 @@ package frc.team3323;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team3323.Elevator.Elevator;
 import frc.team3323.Manipulator.Arms;
 import frc.team3323.Manipulator.Wheels;
 
 public class UI
 {
-    private XboxController xbox = new XboxController(0);
+    private XboxController xboxDrivetrain = new XboxController(0);
+    private XboxController xboxCube = new XboxController(1);
+    private JoystickButton intakeSwitch = new JoystickButton(xboxCube,6);
+    private JoystickButton exhaustSwitch = new JoystickButton(xboxCube, 5);
+    private JoystickButton openSwitch = new JoystickButton(xboxCube,2);
+    private JoystickButton closeSwitch = new JoystickButton(xboxCube,3);
+    private JoystickButton gripSwitch = new JoystickButton(xboxCube,1);
 
-    private JoystickButton intakeSwitch = new JoystickButton(xbox,6);
-    private JoystickButton exhaustSwitch = new JoystickButton(xbox, 5);
-    private JoystickButton openSwitch = new JoystickButton(xbox,2);
-    private JoystickButton closeSwitch = new JoystickButton(xbox,1);
-
-    public  UI(Arms arms, Wheels wheels, Elevator elev)
+    public UI(Arms arms, Wheels wheels)
     {
         openSwitch.whileHeld(arms.getOpen());
         closeSwitch.whileHeld(arms.getClose());
         intakeSwitch.whileHeld(wheels.getIntake());
         exhaustSwitch.whileHeld(wheels.getExhaust());
+        gripSwitch.whileHeld(arms.getGrip());
 
     }
 
-    public XboxController getXbox()
+    public XboxController getXboxDrive()
     {
-        return xbox;
+        return xboxDrivetrain;
+    }
+
+    public XboxController getXboxCube()
+    {
+        return xboxCube;
     }
 }

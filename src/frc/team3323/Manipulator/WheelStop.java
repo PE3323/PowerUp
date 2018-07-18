@@ -20,6 +20,7 @@ public class WheelStop extends Command {
 
     protected void execute()
     {
-        wheels.stop();
+        wheels.moveWheels(true,0,true);
+        wheels.moveWheels(false,0,true);
     }
 }

@@ -25,17 +25,16 @@ public class Drivetrain {
 
     public Drivetrain()
     {
-      left.setInverted( true );
-      right.setInverted( true );
+      encoderLeft.setReverseDirection(true);
     }
 
 
     public void log(PowerDistributionPanel pdp)
     {
-        SmartDashboard.putNumber("Draw LB", srxLB.getOutputCurrent());
-        SmartDashboard.putNumber("Draw LF", srxLF.getOutputCurrent());
-        SmartDashboard.putNumber("Draw RB", srxRB.getOutputCurrent());
-        SmartDashboard.putNumber("Draw RF", srxRF.getOutputCurrent());
+        SmartDashboard.putNumber("Draw LB", pdp.getCurrent(0));
+        SmartDashboard.putNumber("Draw LF", pdp.getCurrent(1));
+        SmartDashboard.putNumber("Draw RB", pdp.getCurrent(2));
+        SmartDashboard.putNumber("Draw RF", pdp.getCurrent(3));
         SmartDashboard.putNumber("Encoder Left", pulsesToDistance(encoderLeft));
         SmartDashboard.putNumber("Encoder Right", pulsesToDistance(encoderRight));
         SmartDashboard.putNumber("angle", gyro.getAngle());

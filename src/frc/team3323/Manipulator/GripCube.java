@@ -2,10 +2,11 @@ package frc.team3323.Manipulator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Close extends Command {
+
+public class GripCube extends Command {
     private Arms arms;
 
-    public Close(Arms arms)
+    public GripCube(Arms arms)
     {
         requires(arms);
         this.arms = arms;
@@ -18,7 +19,7 @@ public class Close extends Command {
     }
     protected void execute()
     {
-        arms.moveArm(true,.5,true);
-        arms.moveArm(false,.5,true);
+        arms.moveArm(true,1,true);
+        arms.moveArm(false,1,true);
     }
 }

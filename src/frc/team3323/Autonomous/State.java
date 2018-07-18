@@ -1,5 +1,7 @@
 package frc.team3323.Autonomous;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public abstract class State
 {
     private boolean beenCalled;
@@ -30,7 +32,6 @@ public abstract class State
 
     public void doInitialize()
     {
-
         if (beenCalled == false)
         {
             initialize();
