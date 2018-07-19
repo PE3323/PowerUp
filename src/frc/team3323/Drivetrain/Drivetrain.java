@@ -1,10 +1,8 @@
 package frc.team3323.Drivetrain;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3323.RobotMap;
@@ -17,11 +15,15 @@ public class Drivetrain {
     private WPI_TalonSRX srxRF = new WPI_TalonSRX(RobotMap.rightFrontID);
     private SpeedControllerGroup left = new SpeedControllerGroup(srxLF,srxLB);
     private SpeedControllerGroup right = new SpeedControllerGroup(srxRF,srxRB);
+    private Spark fans = new Spark(9);
 
     private Encoder encoderLeft = new Encoder(RobotMap.leftBlueID, RobotMap.leftYellowID);
     private Encoder encoderRight = new Encoder(RobotMap.rightBlueID,RobotMap.rightYellowID);
     private DifferentialDrive driveTrain = new DifferentialDrive(left,right);
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+
+    private boolean fanOn = false;
+    private boolean beenPressed = false;
 
     public Drivetrain()
     {
@@ -37,6 +39,7 @@ public class Drivetrain {
         SmartDashboard.putNumber("Draw RF", pdp.getCurrent(3));
         SmartDashboard.putNumber("Encoder Left", pulsesToDistance(encoderLeft));
         SmartDashboard.putNumber("Encoder Right", pulsesToDistance(encoderRight));
+
         SmartDashboard.putNumber("angle", gyro.getAngle());
         SmartDashboard.putNumber("Amount Left", left.get());
         SmartDashboard.putNumber("Amount Right", right.get());
@@ -87,5 +90,28 @@ public class Drivetrain {
         double distance;
         distance = encoder.getRaw() / conversion;
         return distance;
+    }
+    public void fan ( JoystickButton fanButton)
+    {
+
+       if (fanButton.get())
+           beenPressed=true;
+
+       if (beenPressed&&fanButton.get()==false&&fanOn==false)
+       {
+           fanOn=true;
+           beenPressed=false;
+       }
+       if (beenPressed&&fanButton.get()==false&&fanOn)
+       {
+           fanOn = false;
+           beenPressed=false;
+       }
+
+        if (fanOn)
+            fans.set(SmartDashboard.getNumber("Fans", 1));
+        else
+            fans.set(0);
+
     }
 }

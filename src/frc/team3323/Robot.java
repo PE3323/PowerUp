@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Robot extends IterativeRobot
+public class  Robot extends IterativeRobot
 {
     private Arms arms = new Arms();
     private Wheels wheels = new Wheels();
@@ -131,7 +131,7 @@ public class Robot extends IterativeRobot
             elevatorDrive = ui.getXboxCube().getRawAxis(1);
         elevator.lift(elevatorDrive,ui);
         drivetrain.getDriveTrain().arcadeDrive(-ui.getXboxDrive().getRawAxis(1), ui.getXboxDrive().getRawAxis(0));
-        SmartDashboard.putBoolean("down",elevatorDown);
+        drivetrain.fan(ui.fanSwitch);
         Scheduler.getInstance().run();
     }
 }
