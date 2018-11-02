@@ -47,6 +47,7 @@ public class  Robot extends IterativeRobot
         SmartDashboard.putData("gyro", drivetrain.getGyro());
         if(elevator.limitSwitch.getVoltage() < 3)
             elevator.encoderElevator.reset();
+        drivetrain.fan(ui.fanSwitch);
     }
 
     public void autonomousInit() {
@@ -56,7 +57,6 @@ public class  Robot extends IterativeRobot
 //            // Right Auto
 //            movements.add( new Move("move1",1, drivetrain, drivetrain.getEncoderRight()));
 //            movements.add( new Turn("turn2",90, drivetrain));
-//            movements.add( new Move("move2",3, drivetrain, drivetrain.getEncoderRight()));
 //            movements.add( new Turn("turn2",-90, drivetrain));
 //            movements.add( new Move("move3",1, drivetrain, drivetrain.getEncoderRight()));
 //        }
@@ -130,8 +130,8 @@ public class  Robot extends IterativeRobot
         else
             elevatorDrive = ui.getXboxCube().getRawAxis(1);
         elevator.lift(elevatorDrive,ui);
-        drivetrain.getDriveTrain().arcadeDrive(-ui.getXboxDrive().getRawAxis(1), ui.getXboxDrive().getRawAxis(0));
-        drivetrain.fan(ui.fanSwitch);
+       double speedDev = SmartDashboard.getNumber("Drive",0.5);
+       drivetrain.getDriveTrain().arcadeDrive(-ui.getXboxDrive().getRawAxis(1 )*speedDev, ui.getXboxDrive().getRawAxis(0));
         Scheduler.getInstance().run();
     }
 }
