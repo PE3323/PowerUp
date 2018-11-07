@@ -130,7 +130,7 @@ public class  Robot extends IterativeRobot
         else
             elevatorDrive = ui.getXboxCube().getRawAxis(1);
         elevator.lift(elevatorDrive,ui);
-       double speedDev = SmartDashboard.getNumber("Drive",0.5);
+       double speedDev = SmartDashboard.getNumber("Drive",1);
        drivetrain.getDriveTrain().arcadeDrive(-ui.getXboxDrive().getRawAxis(1 )*speedDev, ui.getXboxDrive().getRawAxis(0));
         Scheduler.getInstance().run();
     }

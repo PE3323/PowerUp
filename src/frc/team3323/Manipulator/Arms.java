@@ -26,7 +26,7 @@ public class Arms extends Subsystem {
         else
             adjustedSpeed = -speed;
         if(isRight)
-            armRight.set(adjustedSpeed);
+            armRight.set(-adjustedSpeed);
         else
             armLeft.set(adjustedSpeed);
 
